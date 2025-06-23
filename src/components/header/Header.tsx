@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {styled} from '@mui/system';
+import {useNavigate} from "react-router-dom";
 
 
 const HeaderBlock = styled('header')({
@@ -298,7 +299,38 @@ const NavButton = styled('button')({
 });
 
 
+
 const Header: React.FC = () => {
+    
+    const navigate = useNavigate();
+    const headerRef = useRef<HTMLDivElement>();
+    const scrollToAnchor = (anchor: string) => {
+        const element = document.getElementById(anchor);
+
+        if (element) {
+            const headerHeight = headerRef.current?.offsetHeight || 0;
+            const offsetTop = element.getBoundingClientRect().top + window.scrollY - headerHeight;
+
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth',
+            });
+        }
+    };
+    const handleAnchorClick = (event: React.MouseEvent<HTMLButtonElement>, href: string) => {
+        event.preventDefault();
+
+        const [path, anchor] = href.split('#');
+
+        if (path && path !== window.location.pathname) {
+            navigate(path);
+            setTimeout(() => {
+                scrollToAnchor(anchor);
+            }, 0);
+        } else if (anchor) {
+            scrollToAnchor(anchor);
+        }
+    };
     return (
         <HeaderBlock>
             <UpLine/>
@@ -353,10 +385,10 @@ const Header: React.FC = () => {
                             </StoreCurrentItem>
                         </StoreSelector>
                         <ButtonDownHeaderBlock>
-                            <NavButton>Блог</NavButton>
-                            <NavButton>Магазини</NavButton>
+                            <NavButton onClick={(e) => handleAnchorClick(e, `/blog`)}>Блог</NavButton>
+                            <NavButton onClick={(e) => handleAnchorClick(e, `/products`)}>Магазини</NavButton>
                             <NavButton>Питання-відповідь</NavButton>
-                            <NavButton>Робота</NavButton>
+                            <NavButton onClick={(e) => handleAnchorClick(e, `/job`)}>Робота</NavButton>
                         </ButtonDownHeaderBlock>
                     </DownHeader>
                 </HeaderBottomPart>
