@@ -1,11 +1,11 @@
-import React from 'react';
-import {styled} from '@mui/system';
+import React, { useState } from 'react';
+import { styled } from '@mui/system';
 
 const BlogFilterBlog = styled('div')({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
 });
 
 const Wrapper = styled('div')({
@@ -19,7 +19,7 @@ const Wrapper = styled('div')({
     padding: '0 17px',
 });
 
-const Title = styled('h1')(({theme}) => ({
+const Title = styled('h1')(({ theme }) => ({
     fontFamily: 'Inter',
     fontSize: '48px',
     fontWeight: '600',
@@ -31,7 +31,7 @@ const Title = styled('h1')(({theme}) => ({
     },
 }));
 
-const Description = styled('p')(({theme}) => ({
+const Description = styled('p')(({ theme }) => ({
     fontFamily: 'Inter',
     fontSize: '36px',
     fontWeight: '400',
@@ -50,23 +50,22 @@ const FilterBlock = styled('div')({
     marginTop: '35px',
 });
 
-const FilterButtonsBlock = styled("div")(({theme}) => ({
+const FilterButtonsBlock = styled('div')(({ theme }) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: '300px', 
+    gap: '300px',
     width: '100%',
     [theme.breakpoints.down('xl')]: {
         gap: '0px',
         justifyContent: 'space-between',
-       
     },
 }));
 
-const FilterButton = styled('button')(({theme}) => ({
+const FilterButton = styled('button')< { active?: boolean } >(({ theme, active }) => ({
     padding: '8px 37px',
-    backgroundColor: '#e0e0e0',
-    color: '#231f20',
+    backgroundColor: active ? '#00AAAD' : '#e0e0e0',
+    color: active ? '#fff' : '#231f20',
     fontFamily: 'Inter',
     fontSize: '36px',
     fontWeight: '600',
@@ -74,9 +73,9 @@ const FilterButton = styled('button')(({theme}) => ({
     cursor: 'pointer',
     borderRadius: '0px',
     transition: 'all 0.3s',
-    '&:hover':{
+    '&:hover': {
         backgroundColor: '#00AAAD',
-        color: '#fff'
+        color: '#fff',
     },
     [theme.breakpoints.down('lg')]: {
         fontSize: '28px',
@@ -90,15 +89,15 @@ const FilterButton = styled('button')(({theme}) => ({
         fontSize: '18px',
         padding: '4px 6px',
     },
-    
 }));
 
-const FilterCategoriesBlock = styled("div")(({theme}) => ({
+const FilterCategoriesBlock = styled('div')(({ theme }) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'wrap',
     width: '100%',
+    gap: '10px',
     marginTop: '65px',
     [theme.breakpoints.down('md')]: {
         justifyContent: 'center',
@@ -110,10 +109,10 @@ const CategoryCard = styled('div')({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    gap: '20px'
+    gap: '20px',
 });
 
-const CategoryTitle = styled('h3')(({theme}) => ({
+const CategoryTitle = styled('h3')(({ theme }) => ({
     fontFamily: 'Inter',
     fontSize: '24px',
     fontWeight: '600',
@@ -125,61 +124,82 @@ const CategoryTitle = styled('h3')(({theme}) => ({
     },
 }));
 
-
 const BlogFilter: React.FC = () => {
+    const [activeFilter, setActiveFilter] = useState<'home' | 'garden' | 'sleep'>('home');
+
+    const forHome = [
+        { title: 'Вітальня', image: '/living-room-filter-icon.png' },
+        { title: 'Кухня', image: '/kitchen-filter-icon.png' },
+        { title: 'Спальня', image: '/badroom-filter-icon.png' },
+        { title: 'Ванна', image: '/bathroom-filter-icon.png' },
+        { title: 'Кабінет', image: '/office-filter-icon.png' },
+        { title: 'Двір', image: '/garden-filter-icon.png' },
+    ];
+
+    const forGarden = [
+        { title: 'Балкон та патіо', image: '/balkon.png' },
+        { title: 'На свіжому повітрі', image: '/fresh-air.png' },
+        { title: 'Свята', image: '/celebrating.png' },
+        { title: 'Догляд', image: '/doglyad.png' },
+    ];
+
+    const forSleep = [
+        { title: 'Матраци та ліжка', image: '/bed.png' },
+        { title: 'Ковдри', image: '/cover.png' },
+        { title: 'Подушки', image: '/pillow.png' },
+        { title: 'Здоров’я та алергії', image: '/health.png' },
+        { title: 'Поради для сну', image: '/night.png' },
+        { title: 'Догляд', image: '/care.png' },
+    ];
+
+    const categories =
+        activeFilter === 'home'
+            ? forHome
+            : activeFilter === 'garden'
+                ? forGarden
+                : forSleep;
+
     return (
         <BlogFilterBlog>
             <Wrapper>
                 <Title>Блог</Title>
                 <Description>Ідеї за кімнатами</Description>
             </Wrapper>
+
             <FilterBlock>
                 <Wrapper>
                     <FilterButtonsBlock>
-                        <FilterButton sx={{
-                            backgroundColor: '#00AAAD',
-                            color: '#fff'
-                        }}>Для дома</FilterButton>
-                        <FilterButton>Для саду</FilterButton>
-                        <FilterButton>Для сну</FilterButton>
+                        <FilterButton
+                            active={activeFilter === 'home'}
+                            onClick={() => setActiveFilter('home')}
+                        >
+                            Для дому
+                        </FilterButton>
+
+                        <FilterButton
+                            active={activeFilter === 'garden'}
+                            onClick={() => setActiveFilter('garden')}
+                        >
+                            Для саду
+                        </FilterButton>
+
+                        <FilterButton
+                            active={activeFilter === 'sleep'}
+                            onClick={() => setActiveFilter('sleep')}
+                        >
+                            Для сну
+                        </FilterButton>
                     </FilterButtonsBlock>
+
                     <FilterCategoriesBlock>
-                        <CategoryCard>
-                            <a href="#">
-                                <img src="/living-room-filter-icon.png" alt="Living room"/>
-                                <CategoryTitle>Вітальня</CategoryTitle>
-                            </a>
-                        </CategoryCard>
-                        <CategoryCard>
-                            <a href="#">
-                                <img src="/kitchen-filter-icon.png" alt="Kitchen"/>
-                                <CategoryTitle>Кухня</CategoryTitle>
-                            </a>
-                        </CategoryCard>
-                        <CategoryCard>
-                            <a href="#">
-                                <img src="/badroom-filter-icon.png" alt="Badroom"/>
-                                <CategoryTitle>Спальня</CategoryTitle>
-                            </a>
-                        </CategoryCard>
-                        <CategoryCard>
-                            <a href="#">
-                                <img src="/bathroom-filter-icon.png" alt="Bathroom"/>
-                                <CategoryTitle>Ванна</CategoryTitle>
-                            </a>
-                        </CategoryCard>
-                        <CategoryCard>
-                            <a href="#">
-                                <img src="/office-filter-icon.png" alt="Office"/>
-                                <CategoryTitle>Кабінет</CategoryTitle>
-                            </a>
-                        </CategoryCard>
-                        <CategoryCard>
-                            <a href="#">
-                                <img src="/garden-filter-icon.png" alt="Garden"/>
-                                <CategoryTitle>Двір</CategoryTitle>
-                            </a>
-                        </CategoryCard>
+                        {categories.map((item) => (
+                            <CategoryCard key={item.title}>
+                                <a href="#">
+                                    <img src={item.image} alt={item.title} />
+                                    <CategoryTitle>{item.title}</CategoryTitle>
+                                </a>
+                            </CategoryCard>
+                        ))}
                     </FilterCategoriesBlock>
                 </Wrapper>
             </FilterBlock>

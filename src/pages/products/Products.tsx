@@ -33,7 +33,7 @@ const DecorativeLine = styled('div')({
     opacity: '50%',
 });
 
-const ProductBlock = styled('div')({
+const ProductBlock = styled('div')(({theme}) => ({
     display: 'flex',
     justifyContent: 'stretch',
     alignItems: 'stretch',
@@ -41,7 +41,10 @@ const ProductBlock = styled('div')({
     flexWrap: 'wrap',
     paddingTop: '50px',
     gap: '30px 33px',
-});
+    [theme.breakpoints.down('md')]: {
+        justifyContent: 'center',
+    },
+}));
 
 // const brand: Brand = { id: 1, name: 'BISTRUP' };
 // const category: Category = { id: 1, name: 'Товари для дому' };

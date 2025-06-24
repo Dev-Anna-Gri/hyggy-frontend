@@ -1,32 +1,39 @@
 import React from 'react';
 import { styled } from '@mui/system';
 import {DiscountType, Product} from "../consts.ts";
-import type { ProductVariant } from '../Products'
 
-const CardBlock = styled('div')({
+const CardBlock = styled('div')(({theme}) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',
     backgroundColor: '#fff',
     flexDirection: 'column',
     boxShadow: '0px 4px 6px 0px rgba(0, 0, 0, 0.25)',
-});
+    [theme.breakpoints.down('md')]: {
+        maxWidth: '330px',
+    },
+}));
 
 const ImageBlock = styled('div')({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
     position: 'relative'
 });
 
-const MainImage = styled('img')({
+const MainImage = styled('img')(({theme}) => ({
     width: '390px',
     height: '500px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    objectFit: 'fill'
-});
+    objectFit: 'fill',
+    [theme.breakpoints.down('md')]: {
+        height: '100%',
+        width: '100%',
+    },
+}));
 
 const AdditionalInfoBlock = styled('div')({
     display: 'flex',
